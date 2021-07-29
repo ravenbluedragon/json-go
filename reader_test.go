@@ -56,15 +56,17 @@ func TestReaderPeek(t *testing.T) {
 	}
 	for _, tc := range table {
 		v, e := r.peek(tc.count)
-		t.Logf("Peek %d bytes", tc.count)
-		if r.position != pos {
-			t.Fatalf("Reader has been modified: %#v, %d", r.document, r.position)
-		}
-		if tc.value != v {
-			t.Fatalf("Expected %#v, Received %#v", tc.value, v)
-		}
-		if tc.err != e {
-			t.Fatalf("Expected %v, Received %v", tc.err, e)
+		if r.position != pos || tc.value != v || tc.err != e {
+			t.Logf("Peek %d bytes", tc.count)
+			if r.position != pos {
+				t.Errorf("Reader has been modified: %#v, %d", r.document, r.position)
+			}
+			if tc.value != v {
+				t.Errorf("Expected %#v, Received %#v", tc.value, v)
+			}
+			if tc.err != e {
+				t.Errorf("Expected %v, Received %v", tc.err, e)
+			}
 		}
 	}
 }
@@ -90,12 +92,14 @@ func TestReaderAdvance(t *testing.T) {
 	for _, tc := range table {
 		r := reader{tc.doc, tc.pos}
 		e := r.advance(tc.count)
-		t.Logf("Advance %d bytes, %v", tc.count, r)
-		if r.position != tc.target {
-			t.Fatalf("Expected: %d, Received %d", tc.target, r.position)
-		}
-		if tc.err != e {
-			t.Fatalf("Expected %v, Received %v", tc.err, e)
+		if r.position != tc.target || tc.err != e {
+			t.Logf("Advance %d bytes, doc %#v, pos %d", tc.count, tc.doc, tc.pos)
+			if r.position != tc.target {
+				t.Errorf("Expected: %d, Received %d", tc.target, r.position)
+			}
+			if tc.err != e {
+				t.Errorf("Expected %v, Received %v", tc.err, e)
+			}
 		}
 	}
 }

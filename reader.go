@@ -15,3 +15,9 @@ func (r *reader) readRune() (rune, error) {
 	r.position++
 	return rune(c), nil
 }
+
+// peek will return the next count bytes of the string without changing position
+func (reader) peek(int) (string, error) { return "", nil }
+
+// advance will move the position forward by count
+func (*reader) advance(int) error { return nil }

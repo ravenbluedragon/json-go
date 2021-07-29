@@ -7,4 +7,11 @@ type reader struct {
 }
 
 // readRune will read the next Rune from the document and advance the position
-func (*reader) readRune() (rune, error) { return 0, nil }
+func (r *reader) readRune() (rune, error) {
+	if r.position >= len(r.document) {
+		return 0, UnexpectedEndOfDocument
+	}
+	c := r.document[r.position]
+	r.position++
+	return rune(c), nil
+}

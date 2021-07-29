@@ -18,13 +18,13 @@ func TestReaderRune(t *testing.T) {
 		{"sadaf;lkj\\b", 5, output{';', nil, 6}},
 		{"sadaf;lkj\\b", 10, output{'b', nil, 11}},
 		{"sadaf;lkj\\b", 15, output{0, UnexpectedEndOfDocument, 15}},
-		{" \t\r\n{}", 2, output{'\t', nil, 3}},
+		{" \r\t\n{}", 2, output{'\t', nil, 3}},
 	}
 	for _, tc := range table {
 		r := reader{tc.doc, tc.start}
 		c, e := r.readRune()
 		if tc.out != (output{c, e, r.position}) {
-			t.Logf("Test case: doc \"%#v\", start %d", tc.doc, tc.start)
+			t.Logf("Test case: doc %#v, start %d", tc.doc, tc.start)
 			if tc.out.value != c {
 				t.Errorf("Expected '%c', Received '%c'", tc.out.value, c)
 			}

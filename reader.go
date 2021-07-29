@@ -17,7 +17,25 @@ func (r *reader) readRune() (rune, error) {
 }
 
 // peek will return the next count bytes of the string without changing position
-func (reader) peek(int) (string, error) { return "", nil }
+func (r reader) peek(count int) (string, error) {
+	if count < 0 {
+		return "", PeekBackwards
+	}
+	if r.position+count > len(r.document) {
+		return "", UnexpectedEndOfDocument
+	}
+	return r.document[r.position : r.position+count], nil
+}
 
 // advance will move the position forward by count
-func (*reader) advance(int) error { return nil }
+func (r *reader) advance(count int) error {
+	if count == 0 {
+		return nil
+	}
+	t := r.position + count
+	if t < 0 || t >= len(r.document) {
+		return UnexpectedEndOfDocument
+	}
+	r.position = t
+	return nil
+}

@@ -2,6 +2,34 @@ package jsongo
 
 import "testing"
 
+type logline struct {
+	format    string
+	arguments []interface{}
+}
+
+func log(format string, args ...interface{}) logline {
+	return logline{format, args}
+}
+
+type argument struct {
+	format   string
+	expected interface{}
+	received interface{}
+}
+
+func helper(t *testing.T, log logline, args ...argument) {
+	fail := false
+	for _, a := range args {
+		if a.expected != a.received {
+			t.Errorf(a.format, a.expected, a.received)
+			fail = true
+		}
+	}
+	if fail {
+		t.Logf(log.format, log.arguments...)
+	}
+}
+
 func TestReaderRune(t *testing.T) {
 	type output struct {
 		value rune
@@ -23,18 +51,12 @@ func TestReaderRune(t *testing.T) {
 	for _, tc := range table {
 		r := reader{tc.doc, tc.start}
 		c, e := r.readRune()
-		if tc.out != (output{c, e, r.position}) {
-			t.Logf("Test case: doc %#v, start %d", tc.doc, tc.start)
-			if tc.out.value != c {
-				t.Errorf("Expected '%c', Received '%c'", tc.out.value, c)
-			}
-			if tc.out.err != e {
-				t.Errorf("Expected %v, Received %v", tc.out.err, e)
-			}
-			if tc.out.pos != r.position {
-				t.Errorf("Expected %d, Received %d", tc.out.pos, r.position)
-			}
-		}
+		helper(t,
+			log("Test case: doc %#v, start %d", tc.doc, tc.start),
+			argument{"Expected '%c', Received '%c'", tc.out.value, c},
+			argument{"Expected %v, Received %v", tc.out.err, e},
+			argument{"Expected %d, Received %d", tc.out.pos, r.position},
+		)
 	}
 }
 
@@ -56,18 +78,12 @@ func TestReaderPeek(t *testing.T) {
 	}
 	for _, tc := range table {
 		v, e := r.peek(tc.count)
-		if r.position != pos || tc.value != v || tc.err != e {
-			t.Logf("Peek %d bytes", tc.count)
-			if r.position != pos {
-				t.Errorf("Reader has been modified: %#v, %d", r.document, r.position)
-			}
-			if tc.value != v {
-				t.Errorf("Expected %#v, Received %#v", tc.value, v)
-			}
-			if tc.err != e {
-				t.Errorf("Expected %v, Received %v", tc.err, e)
-			}
-		}
+		helper(t,
+			log("Peek %d bytes", tc.count),
+			argument{"Reader has been modified: %d, %d", pos, r.position},
+			argument{"Expected %#v, Received %#v", tc.value, v},
+			argument{"Expected %v, Received %v", tc.err, e},
+		)
 	}
 }
 
@@ -92,14 +108,10 @@ func TestReaderAdvance(t *testing.T) {
 	for _, tc := range table {
 		r := reader{tc.doc, tc.pos}
 		e := r.advance(tc.count)
-		if r.position != tc.target || tc.err != e {
-			t.Logf("Advance %d bytes, doc %#v, pos %d", tc.count, tc.doc, tc.pos)
-			if r.position != tc.target {
-				t.Errorf("Expected: %d, Received %d", tc.target, r.position)
-			}
-			if tc.err != e {
-				t.Errorf("Expected %v, Received %v", tc.err, e)
-			}
-		}
+		helper(t,
+			log("Advance %d bytes, doc %#v, pos %d", tc.count, tc.doc, tc.pos),
+			argument{"Expected: %d, Received %d", tc.target, r.position},
+			argument{"Expected %v, Received %v", tc.err, e},
+		)
 	}
 }

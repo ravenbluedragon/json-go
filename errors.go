@@ -14,10 +14,38 @@ const PeekBackwards = GeneralError("Cannot peek Backwards")
 // KeywordNotFound signals that the reader does not match a keyword
 const KeywordNotFound = GeneralError("No Keyword matched")
 
+// num converts an int to a decimal string
+func num(n int) string {
+	if n == 0 {
+		return "0"
+	}
+	left := 0
+	var digs []rune
+	if n < 0 {
+		digs = append(digs, '-')
+		n = -n
+		left++
+	}
+	for n > 0 {
+		d := rune(n % 10)
+		digs = append(digs, '0'+d)
+		n /= 10
+	}
+	right := len(digs) - 1
+	for left < right {
+		digs[left], digs[right] = digs[right], digs[left]
+		left++
+		right--
+	}
+	return string(digs)
+}
+
 // InvalidCharacter signals that there is no context this character is correct
 type InvalidCharacter struct {
 	character rune
 	position  int
 }
 
-func (e InvalidCharacter) Error() string { return string(e.character) }
+func (e InvalidCharacter) Error() string {
+	return "Invalid Character " + string(e.character) + " at position " + num(e.position)
+}

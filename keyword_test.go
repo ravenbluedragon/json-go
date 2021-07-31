@@ -23,6 +23,7 @@ func TestKeyword(t *testing.T) {
 		{"true]   g", _true, 4, nil},
 		{"true}", _true, 4, nil},
 		{"true  }", _true, 6, nil},
+		{"", nil, 0, KeywordNotFound},
 	}
 	for _, tc := range table {
 		r := &reader{tc.doc, 0}

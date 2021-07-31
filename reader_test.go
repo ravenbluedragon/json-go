@@ -70,12 +70,15 @@ func TestReaderAdvance(t *testing.T) {
 		{"", 0, 0, 0, nil},
 		{"", 0, 1, 0, UnexpectedEndOfDocument},
 		{"", 0, -1, 0, UnexpectedEndOfDocument},
+		{"true", 0, 4, 4, nil},
+		{"false", 0, 5, 5, nil},
 		{"asdf", 1, -2, 1, UnexpectedEndOfDocument},
 		{"asdf", 1, -1, 0, nil},
 		{"asdf", 1, 0, 1, nil},
 		{"asdf", 1, 1, 2, nil},
 		{"asdf", 1, 2, 3, nil},
-		{"asdf", 1, 3, 1, UnexpectedEndOfDocument},
+		{"asdf", 1, 3, 4, nil},
+		{"asdf", 1, 4, 1, UnexpectedEndOfDocument},
 	}
 	for _, tc := range table {
 		r := reader{tc.doc, tc.pos}

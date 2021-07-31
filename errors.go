@@ -10,3 +10,14 @@ const UnexpectedEndOfDocument = GeneralError("Unexpected End of Docuemnt")
 
 // PeekBackwards signals an attempt to peek earlier in the document
 const PeekBackwards = GeneralError("Cannot peek Backwards")
+
+// KeywordNotFound signals that the reader does not match a keyword
+const KeywordNotFound = GeneralError("No Keyword matched")
+
+// InvalidCharacter signals that there is no context this character is correct
+type InvalidCharacter struct {
+	character rune
+	position  int
+}
+
+func (e InvalidCharacter) Error() string { return string(e.character) }

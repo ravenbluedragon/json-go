@@ -41,4 +41,17 @@ func (r *reader) advance(count int) error {
 }
 
 // skipWhitespace will advance past all whitespace
-func (*reader) skipWhitespace() {}
+func (r *reader) skipWhitespace() {
+	for {
+		c, e := r.readRune()
+		if e == UnexpectedEndOfDocument {
+			return
+		}
+		switch c {
+		case ' ', '\t', '\r', '\n':
+			continue
+		}
+		_ = r.advance(-1) // NOTE: an UnexpectedEndOfDocument error would be ok here
+		return
+	}
+}

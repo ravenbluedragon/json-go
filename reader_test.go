@@ -125,11 +125,15 @@ func TestReaderSkipWhitespace(t *testing.T) {
 		{"", 0, 0},
 		{"", 7, 7},
 		{"a", 0, 0},
-		{"a b", 0, 0},
-		{"a b", 1, 2},
-		{"a b", 2, 2},
+		{"a b ", 0, 0},
+		{"a b ", 1, 2},
+		{"a b ", 2, 2},
+		{"a b ", 3, 4},
+		{"a b ", 4, 4},
 		{"a\t\tc\r", 1, 3},
-		{"\t\r\n     ", 2, 7},
+		{"a\t\tc\r", 3, 3},
+		{"a\t\tc\r", 4, 5},
+		{"\t\r\n     ", 2, 8},
 	}
 	for _, tc := range table {
 		r := reader{tc.doc, tc.pos}

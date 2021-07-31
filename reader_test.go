@@ -2,34 +2,6 @@ package jsongo
 
 import "testing"
 
-type logline struct {
-	format    string
-	arguments []interface{}
-}
-
-func log(format string, args ...interface{}) logline {
-	return logline{format, args}
-}
-
-type argument struct {
-	format   string
-	expected interface{}
-	received interface{}
-}
-
-func helper(t *testing.T, log logline, args ...argument) {
-	fail := false
-	for _, a := range args {
-		if a.expected != a.received {
-			t.Errorf(a.format, a.expected, a.received)
-			fail = true
-		}
-	}
-	if fail {
-		t.Logf(log.format, log.arguments...)
-	}
-}
-
 func TestReaderRune(t *testing.T) {
 	type output struct {
 		value rune

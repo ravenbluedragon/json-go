@@ -39,3 +39,6 @@ func (r *reader) advance(count int) error {
 	r.position = t
 	return nil
 }
+
+// skipWhitespace will advance past all whitespace
+func (*reader) skipWhitespace() {}

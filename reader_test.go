@@ -115,3 +115,28 @@ func TestReaderAdvance(t *testing.T) {
 		)
 	}
 }
+
+func TestReaderSkipWhitespace(t *testing.T) {
+	table := []struct {
+		doc    string
+		pos    int
+		target int
+	}{
+		{"", 0, 0},
+		{"", 7, 7},
+		{"a", 0, 0},
+		{"a b", 0, 0},
+		{"a b", 1, 2},
+		{"a b", 2, 2},
+		{"a\t\tc\r", 1, 3},
+		{"\t\r\n     ", 2, 7},
+	}
+	for _, tc := range table {
+		r := reader{tc.doc, tc.pos}
+		r.skipWhitespace()
+		helper(t,
+			log("Skip whitespace in doc %#v from %d", tc.doc, tc.pos),
+			argument{"Expected %d, Received %d", tc.target, r.position},
+		)
+	}
+}

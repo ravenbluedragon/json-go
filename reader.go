@@ -33,7 +33,7 @@ func (r *reader) advance(count int) error {
 		return nil
 	}
 	t := r.position + count
-	if t < 0 || t >= len(r.document) {
+	if t < 0 || t > len(r.document) {
 		return UnexpectedEndOfDocument
 	}
 	r.position = t

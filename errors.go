@@ -14,6 +14,12 @@ const PeekBackwards = GeneralError("Cannot peek Backwards")
 // KeywordNotFound signals that the reader does not match a keyword
 const KeywordNotFound = GeneralError("No Keyword matched")
 
+// OpeningQuoteMissing signals that a string was expected but no opening quote
+const OpeningQuoteMissing = GeneralError("Opening Quote Missing")
+
+// ClosingQuoteMissing signals that a string did not have a closing quote
+const ClosingQuoteMissing = GeneralError("Closing Quote Missing")
+
 // num converts an int to a decimal string
 func num(n int) string {
 	if n == 0 {

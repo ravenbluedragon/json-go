@@ -17,7 +17,7 @@ func TestString(t *testing.T) {
 		{"\"\\", "", 2, UnexpectedEndOfDocument},
 		{"\"a\"", "a", 3, nil},
 		{"   \" \\t  a\"   ", " \t  a", 14, nil},
-		{"\" \t  a\"   ", " ", 2, InvalidCharacter{'\t', 2}},
+		{"\" \t  a\"   ", " ", 3, InvalidCharacter{'\t', 3}},
 		{"\"\\ua2F5\"", "\ua2F5", 8, nil},
 		{"\"\\u09AF\"", "\u09AF", 8, nil},
 		{"\" \\\" \\\\ \\/ \\b \\f \\n \\r \\u09af \"", " \" \\ / \b \f \n \r \u09AF ", 31, nil},

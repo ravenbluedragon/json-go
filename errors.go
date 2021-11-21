@@ -6,7 +6,7 @@ type GeneralError string
 func (e GeneralError) Error() string { return string(e) }
 
 // UnexpectedEndOfDocument signals that a process tried to read beyond the final character in a document
-const UnexpectedEndOfDocument = GeneralError("Unexpected End of Docuemnt")
+const UnexpectedEndOfDocument = GeneralError("Unexpected End of Document")
 
 // PeekBackwards signals an attempt to peek earlier in the document
 const PeekBackwards = GeneralError("Cannot peek Backwards")

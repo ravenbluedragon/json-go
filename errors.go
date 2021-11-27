@@ -20,6 +20,12 @@ const OpeningQuoteMissing = GeneralError("Opening Quote Missing")
 // ClosingQuoteMissing signals that a string did not have a closing quote
 const ClosingQuoteMissing = GeneralError("Closing Quote Missing")
 
+// PrecisionInsufficient signals that a number has more precision than a float64
+const PrecisionInsufficient = GeneralError("Precision Insufficient for Number")
+
+// NumberNotRepresentable signals that the number is outside the representable range of a float64
+const NumberNotRepresentable = GeneralError("Number not Representable")
+
 // num converts an int to a decimal string
 func num(n int) string {
 	if n == 0 {

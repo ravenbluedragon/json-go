@@ -29,5 +29,6 @@ func helper(t *testing.T, log logline, args ...argument) {
 	}
 	if fail {
 		t.Logf(log.format, log.arguments...)
+		t.Log("-----")
 	}
 }

@@ -11,6 +11,7 @@ func TestNumber(t *testing.T) {
 	}
 	table := []test{
 		{"0", 0, 1, nil},
+		{"-0", 0, 2, nil},
 		{"00", 0, 2, InvalidCharacter{'0', 1}},
 		{"000.0", 0, 2, InvalidCharacter{'0', 1}},
 		{"0.0", 0, 3, nil},
@@ -20,12 +21,17 @@ func TestNumber(t *testing.T) {
 		{"1e-400", 0, 6, PrecisionInsufficient},
 		{"3.141592653589793238462643383279", 3.141592653589793, 32, PrecisionInsufficient},
 		{"30.6e50", 30.6e50, 7, nil},
-		{"30.6 e 50", 0, 6, InvalidCharacter{' ', 5}},
+		{"30.6 e 50", 30.6, 4, nil},
 		{"-7.5", -7.5, 4, nil},
+		{"-7.005", -7.005, 6, nil},
 		{"-31e-5", -31e-5, 6, nil},
 		{"-31e+5", -31e5, 6, nil},
+		{"-31E5", -31e5, 5, nil},
+		{"-31x5", 0, 4, InvalidCharacter{'x', 3}},
 		{"--7.5", 0, 2, InvalidCharacter{'-', 1}},
 		{"-31e--5", 0, 6, InvalidCharacter{'-', 5}},
+		{"351.89,", 351.89, 6, nil},
+		{"351.89  ", 351.89, 6, nil},
 	}
 	for _, tc := range table {
 		r := &reader{tc.doc, 0}
